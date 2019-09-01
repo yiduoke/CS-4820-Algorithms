@@ -1,12 +1,52 @@
 import java.util.*;
 import java.io.Reader;
 import java.io.Writer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+
 
 public class Framework{
 
     public static void main(String[] args){
+      
+        List<Integer> all_numbers = new ArrayList<>();
+        int num_pairs = 0;
+
+        // change this later for reading both INPUT and OUTPUT file names
+        BufferedReader input_buffer = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String testFileName = input_buffer.readLine();
+            input_buffer.close();
+
+            try{
+                BufferedReader inputStream = new BufferedReader(new FileReader(testFileName));
+                String str = inputStream.readLine();
+                num_pairs = Integer.parseInt(str);
+                System.out.println(num_pairs + " pairs");
+
+                for (int i = 0; i < 2 * num_pairs; i++){
+                    String line = inputStream.readLine();
+                    String[] preferences = line.split(" ");
+                    for (int c = 0; c < num_pairs; c++){
+                        all_numbers.add(Integer.parseInt(preferences[c]));
+                    }
+                }
+                inputStream.close();
+            }
+            catch(java.io.FileNotFoundException ex){
+                System.out.println(testFileName + " doesn't exist");
+            }
+        }
+        catch (java.io.IOException ex){
+            System.out.println("your file is bad");
+        }
+
+        
+        all_numbers.forEach(System.out::println);
+
         int m0_fav_woman;
-        int num_pairs = 2; //will get changed later
 
         // will get set after algo
         int r1 = 0;
