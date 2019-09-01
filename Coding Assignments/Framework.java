@@ -56,21 +56,31 @@ public class Framework{
         for (int i = 0; i < num_pairs; i++) {
             Queue<Integer> current_man_preferences = new LinkedList<Integer>();
             for (int j=0; j < num_pairs; j++){
-                current_man_preferences.add(all_numbers.remove()); //change number later
+                current_man_preferences.add(all_numbers.remove());
             }
-            men_preferences.add(new LinkedList<Integer>(current_man_preferences));
+            men_preferences.add(current_man_preferences);
         }
 
+        men_preferences.forEach(System.out::println);
+        System.out.println("men");
         // populating womens' preference queues
         ArrayList<Queue<Integer>> women_preferences = new ArrayList<Queue<Integer>>(num_pairs);
 
         for (int i = 0; i < num_pairs; i++) {
             Queue<Integer> current_woman_preferences = new LinkedList<Integer>();
             for (int j=0; j < num_pairs; j++){
-                current_woman_preferences.add(all_numbers.remove()); //change number later
+                current_woman_preferences.add(all_numbers.remove());
             }
-            women_preferences.add(new LinkedList<Integer>(current_woman_preferences));
+            women_preferences.add(current_woman_preferences);
         }
+        women_preferences.forEach(System.out::println);
+        System.out.println("women");
+
+
+
+        /////////////////////////////////the actual algorithm now//////////////////////////////////
+
+
     }
 
 }
