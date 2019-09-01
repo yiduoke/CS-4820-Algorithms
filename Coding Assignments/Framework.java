@@ -11,7 +11,7 @@ public class Framework{
 
     public static void main(String[] args){
       
-        List<Integer> all_numbers = new ArrayList<>();
+        Queue<Integer> all_numbers = new LinkedList<Integer>();
         int num_pairs = 0;
 
         // change this later for reading both INPUT and OUTPUT file names
@@ -43,8 +43,6 @@ public class Framework{
             System.out.println("your file is bad");
         }
 
-        
-        all_numbers.forEach(System.out::println);
 
         int m0_fav_woman;
 
@@ -52,29 +50,26 @@ public class Framework{
         int r1 = 0;
         int r2 = 0;
     
-
         // populating mens' preference queues
-        ArrayList<Queue<Integer>> men_preferences = 
-            new ArrayList<Queue<Integer>>(num_pairs);
+        ArrayList<Queue<Integer>> men_preferences = new ArrayList<Queue<Integer>>(num_pairs);
 
         for (int i = 0; i < num_pairs; i++) {
             Queue<Integer> current_man_preferences = new LinkedList<Integer>();
             for (int j=0; j < num_pairs; j++){
-                current_man_preferences.add(0); //change number later
+                current_man_preferences.add(all_numbers.remove()); //change number later
             }
             men_preferences.add(new LinkedList<Integer>(current_man_preferences));
         }
 
         // populating womens' preference queues
-        ArrayList<Queue<Integer>> women_preferences = 
-            new ArrayList<Queue<Integer>>(num_pairs);
+        ArrayList<Queue<Integer>> women_preferences = new ArrayList<Queue<Integer>>(num_pairs);
 
         for (int i = 0; i < num_pairs; i++) {
             Queue<Integer> current_woman_preferences = new LinkedList<Integer>();
             for (int j=0; j < num_pairs; j++){
-                current_woman_preferences.add(0); //change number later
+                current_woman_preferences.add(all_numbers.remove()); //change number later
             }
-            men_preferences.add(new LinkedList<Integer>(current_woman_preferences));
+            women_preferences.add(new LinkedList<Integer>(current_woman_preferences));
         }
     }
 
