@@ -26,33 +26,22 @@ public class Framework{
         Queue<Integer> all_numbers = new LinkedList<Integer>();
         int num_pairs = 0;
 
-        // TODO: change this later for reading both INPUT and OUTPUT file names
-        BufferedReader input_buffer = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            String testFileName = input_buffer.readLine();
-            input_buffer.close();
+        BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in));
+        try{
+        String str = inputStream.readLine();
+        num_pairs = Integer.parseInt(str);
 
-            try{
-                BufferedReader inputStream = new BufferedReader(new FileReader(testFileName));
-                String str = inputStream.readLine();
-                num_pairs = Integer.parseInt(str);
-                System.out.println(num_pairs + " pairs");
-
-                for (int i = 0; i < 2 * num_pairs; i++){
-                    String line = inputStream.readLine();
-                    String[] preferences = line.split(" ");
-                    for (int c = 0; c < num_pairs; c++){
-                        all_numbers.add(Integer.parseInt(preferences[c]));
-                    }
-                }
-                inputStream.close();
-            }
-            catch(java.io.FileNotFoundException ex){
-                System.out.println(testFileName + " doesn't exist");
+        for (int i = 0; i < 2 * num_pairs; i++){
+            String line = inputStream.readLine();
+            String[] preferences = line.split(" ");
+            for (int c = 0; c < num_pairs; c++){
+                all_numbers.add(Integer.parseInt(preferences[c]));
             }
         }
-        catch (java.io.IOException ex){
-            System.out.println("your file is bad");
+        inputStream.close();
+        }
+        catch(java.io.IOException ex){
+            System.out.println("bad file");
         }
 
     
@@ -98,7 +87,8 @@ public class Framework{
         while (true){
             int first_single_man = any_man_single(marriage_records);
             if (first_single_man == -1){ //no more single men!! yay!!
-                System.out.println("\nr0 = " + marriage_records[0][2]); //TODO: change this later to print to the other file
+                // System.out.println("\nr0 = " + marriage_records[0][2]); //TODO: change this later to print to the other file
+                System.out.println(marriage_records[0][2]); //TODO: change this later to print to the other file
                 break; //we're done
             }
             else{//proceed
@@ -155,7 +145,8 @@ public class Framework{
                 else{
                     r2 = 2;
                 }
-                System.out.println("\nr2 = " + r2); //TODO: change this later to print to the other file
+                // System.out.println("\nr2 = " + r2);
+                System.out.println(r2);
                 break; //we're done
             }
             else{//proceed
@@ -166,14 +157,14 @@ public class Framework{
                     else{
                         if (men_preferences_clone.get(i).size() == 0 && marriage_records2[m0_fav_woman][1] == -1) {
                                 r2 = 1;
-                                System.out.println("\nr2 = " + r2); //TODO: change this later to print to the other file
+                                // System.out.println("\nr2 = " + r2); //TODO: change this later to print to the other file
+                                System.out.println(r2); 
                                 System.exit(0); //we're done
                         }
                         int propose_woman = men_preferences_clone.get(i).remove();
                         int woman_status = marriage_records2[propose_woman][1];
                         int man_ranking_by_woman = women_preferences.get(propose_woman).get(i);
                         if (i == 0 && propose_woman == m0_fav_woman) { // man 0 gets rejected by his favorite woman
-                            System.out.println("first man gets rejected by " + propose_woman);
                             continue;
                         }
                         if (woman_status == -1){ // if the woman in question is single, accept
