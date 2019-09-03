@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 
 
-public class Framework{
+class Main{
 
     /**
         returns the first man by index that's single
