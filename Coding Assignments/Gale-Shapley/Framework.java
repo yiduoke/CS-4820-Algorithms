@@ -27,10 +27,10 @@ class Main{
         int m0_fav_woman = -1;
 
         // initializing the data structures
-        ArrayList<Queue<Integer>> men_preferences = new ArrayList<Queue<Integer>>(1);
-        ArrayList<Queue<Integer>> men_preferences_clone = new ArrayList<Queue<Integer>>(1);
-        // ArrayList<HashMap<Integer, Integer>> women_preferences = new ArrayList<HashMap<Integer, Integer>>(1);
         int[][] women_preferences = new int[1][1];
+        int[][] men_preferences = new int[1][1];
+        int[][] men_preferences_clone = new int[1][1];
+        int[] current_women = new int[1];
 
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in));
         
@@ -40,24 +40,21 @@ class Main{
             int current_number; // for parsing later
 
             // populating mens' preference queues
-            men_preferences = new ArrayList<Queue<Integer>>(num_pairs);
-            men_preferences_clone = new ArrayList<Queue<Integer>>(num_pairs);
+            men_preferences = new int[num_pairs][num_pairs];
+            men_preferences_clone = new int[num_pairs][num_pairs];
+            current_women = new int[num_pairs];
 
             for (int i = 0; i < num_pairs; i++){
                 String line = inputStream.readLine();
                 String[] preferences = line.split(" ");
-                Queue<Integer> current_man_preferences = new LinkedList<Integer>();
-                Queue<Integer> current_man_preferences_clone = new LinkedList<Integer>();
                 for (int j=0; j < num_pairs; j++){
                     current_number = Integer.parseInt(preferences[j]);
-                    current_man_preferences.add(current_number);
-                    current_man_preferences_clone.add(current_number);
+                    men_preferences[i][j] = current_number;
+                    men_preferences_clone[i][j] = current_number;
                 }
-                men_preferences.add(current_man_preferences);
-                men_preferences_clone.add(current_man_preferences_clone);
             }
 
-            m0_fav_woman = men_preferences.get(0).peek(); //to be used for r2
+            m0_fav_woman = men_preferences[0][0]; //to be used for r2
 
 
             // populating womens' preference queues
@@ -113,8 +110,6 @@ class Main{
                     long endTime = System.nanoTime();
                     long entire_duration = (endTime - startStartTime) / 1000000;
                     long duration = (endTime - startTime) / 1000000;
-                    // System.out.println("entire thing took " + entire_duration + " milliseconds");
-                    // System.out.println("algo took " + duration + " milliseconds");
 
                     System.exit(0); //we're done
                 }
@@ -130,6 +125,7 @@ class Main{
                         marriage_records[i][2] = -1;
                     }
                     men_preferences = men_preferences_clone;
+                    current_women = new int[num_pairs];
                 }
             }
             else{//proceed
@@ -138,22 +134,23 @@ class Main{
                         continue;
                     }
                     else{
-                        if (which_part == 2 && men_preferences.get(i).size() == 0) {
+                        // if (which_part == 2 && men_preferences.get(i).size() == 0) {
+                        if (which_part == 2 && current_women[i] == num_pairs) { //man's out of options
                                 r2 = 1;
                                 System.out.println(r2); 
                                 
                                 long endTime = System.nanoTime();
                                 long entire_duration = (endTime - startStartTime) / 1000000;
                                 long duration = (endTime - startTime) / 1000000;
-                                // System.out.println("entire thing took " + entire_duration + " milliseconds");
-                                // System.out.println("algo took " + duration + " milliseconds");
 
                                 System.exit(0); //we're done
                         }
-                        int propose_woman = men_preferences.get(i).remove();
+                        // int propose_woman = men_preferences.get(i).remove();
+                        int propose_woman = men_preferences[i][current_women[i]];
                         int woman_status = marriage_records[propose_woman][1];
                         int man_ranking_by_woman = women_preferences[propose_woman][i];
                         if (which_part == 2 && i == 0 && propose_woman == m0_fav_woman) { // man 0 gets rejected by his favorite woman
+                            current_women[i]++;
                             continue;
                         }
                         if (woman_status == -1){ // if the woman in question is single, accept
@@ -174,6 +171,7 @@ class Main{
                             // this man is cuffed
                             marriage_records[i][0] = propose_woman;
                         }
+                        current_women[i]++;
                     }
                 }
             }
