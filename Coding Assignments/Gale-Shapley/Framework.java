@@ -24,51 +24,59 @@ class Main{
       
         Queue<Integer> all_numbers = new LinkedList<Integer>();
         int num_pairs = 0;
+        int m0_fav_woman = -1;
+
+        // initializing the data structures
+        ArrayList<Queue<Integer>> men_preferences = new ArrayList<Queue<Integer>>(1);
+        ArrayList<Queue<Integer>> men_preferences_clone = new ArrayList<Queue<Integer>>(1);
+        ArrayList<HashMap<Integer, Integer>> women_preferences = new ArrayList<HashMap<Integer, Integer>>(1);
 
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in));
+        
         try{
-        String str = inputStream.readLine();
-        num_pairs = Integer.parseInt(str);
+            String str = inputStream.readLine();
+            num_pairs = Integer.parseInt(str);
+            int current_number; // for parsing later
 
-        for (int i = 0; i < 2 * num_pairs; i++){
-            String line = inputStream.readLine();
-            String[] preferences = line.split(" ");
-            for (int c = 0; c < num_pairs; c++){
-                all_numbers.add(Integer.parseInt(preferences[c]));
+            // populating mens' preference queues
+            men_preferences = new ArrayList<Queue<Integer>>(num_pairs);
+            men_preferences_clone = new ArrayList<Queue<Integer>>(num_pairs);
+
+            for (int i = 0; i < num_pairs; i++){
+                String line = inputStream.readLine();
+                String[] preferences = line.split(" ");
+                Queue<Integer> current_man_preferences = new LinkedList<Integer>();
+                Queue<Integer> current_man_preferences_clone = new LinkedList<Integer>();
+                for (int j=0; j < num_pairs; j++){
+                    current_number = Integer.parseInt(preferences[j]);
+                    current_man_preferences.add(current_number);
+                    current_man_preferences_clone.add(current_number);
+                }
+                men_preferences.add(current_man_preferences);
+                men_preferences_clone.add(current_man_preferences_clone);
             }
-        }
-        inputStream.close();
+
+            m0_fav_woman = men_preferences.get(0).peek(); //to be used for r2
+
+
+            // populating womens' preference queues
+            women_preferences = new ArrayList<HashMap<Integer, Integer>>(num_pairs); //(each man's #, preference rank)
+            for (int i = 0; i < num_pairs; i++) {
+                String line = inputStream.readLine();
+                String[] preferences = line.split(" ");
+                HashMap<Integer, Integer> current_woman_preferences = new HashMap<Integer, Integer>();
+                for (int j=0; j < num_pairs; j++){
+                    current_number = Integer.parseInt(preferences[j]);
+                    current_woman_preferences.put(current_number, j);
+                }
+            women_preferences.add(current_woman_preferences);
+            }
+
+
+            inputStream.close();
         }
         catch(java.io.IOException ex){
             System.out.println("bad file");
-        }
-
-    
-        // populating mens' preference queues
-        ArrayList<Queue<Integer>> men_preferences = new ArrayList<Queue<Integer>>(num_pairs);
-        ArrayList<Queue<Integer>> men_preferences_clone = new ArrayList<Queue<Integer>>(num_pairs);
-        for (int i = 0; i < num_pairs; i++) {
-            Queue<Integer> current_man_preferences = new LinkedList<Integer>();
-            Queue<Integer> current_man_preferences_clone = new LinkedList<Integer>();
-            for (int j=0; j < num_pairs; j++){
-                int item = all_numbers.remove();
-                current_man_preferences.add(item);
-                current_man_preferences_clone.add(item);
-            }
-            men_preferences.add(current_man_preferences);
-            men_preferences_clone.add(current_man_preferences_clone);
-        }
-        
-        int m0_fav_woman = men_preferences.get(0).peek(); //to be used for r2
-        // populating womens' preference queues
-        ArrayList<HashMap<Integer, Integer>> women_preferences = new ArrayList<HashMap<Integer, Integer>>(num_pairs); //(each man's #, preference rank)
-
-        for (int i = 0; i < num_pairs; i++) {
-            HashMap<Integer, Integer> current_woman_preferences = new HashMap<Integer, Integer>();
-            for (int j=0; j < num_pairs; j++){
-                current_woman_preferences.put(all_numbers.remove(), j);
-            }
-            women_preferences.add(current_woman_preferences);
         }
 
         /////////////////////////////////the actual algorithm now//////////////////////////////////
