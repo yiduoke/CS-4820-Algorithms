@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 
 
 class Main{
-
     /**
         returns the first man by index that's single
      */
@@ -21,7 +20,8 @@ class Main{
     }
 
     public static void main(String[] args){
-      
+
+        long startStartTime = System.nanoTime();
         Queue<Integer> all_numbers = new LinkedList<Integer>();
         int num_pairs = 0;
         int m0_fav_woman = -1;
@@ -29,7 +29,8 @@ class Main{
         // initializing the data structures
         ArrayList<Queue<Integer>> men_preferences = new ArrayList<Queue<Integer>>(1);
         ArrayList<Queue<Integer>> men_preferences_clone = new ArrayList<Queue<Integer>>(1);
-        ArrayList<HashMap<Integer, Integer>> women_preferences = new ArrayList<HashMap<Integer, Integer>>(1);
+        // ArrayList<HashMap<Integer, Integer>> women_preferences = new ArrayList<HashMap<Integer, Integer>>(1);
+        int[][] women_preferences = new int[1][1];
 
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in));
         
@@ -60,16 +61,14 @@ class Main{
 
 
             // populating womens' preference queues
-            women_preferences = new ArrayList<HashMap<Integer, Integer>>(num_pairs); //(each man's #, preference rank)
+            women_preferences = new int[num_pairs][num_pairs]; //women_preferences[woman's number][man's number] = mans' ranking in her heart
             for (int i = 0; i < num_pairs; i++) {
                 String line = inputStream.readLine();
                 String[] preferences = line.split(" ");
-                HashMap<Integer, Integer> current_woman_preferences = new HashMap<Integer, Integer>();
                 for (int j=0; j < num_pairs; j++){
                     current_number = Integer.parseInt(preferences[j]);
-                    current_woman_preferences.put(current_number, j);
+                    women_preferences[i][current_number] = j;
                 }
-            women_preferences.add(current_woman_preferences);
             }
 
 
@@ -79,6 +78,8 @@ class Main{
             System.out.println("bad file");
         }
 
+
+        long startTime = System.nanoTime();
         /////////////////////////////////the actual algorithm now//////////////////////////////////
         int marriage_records[][] = new int[num_pairs][3]; 
         int r1;
@@ -106,8 +107,15 @@ class Main{
                     else{
                         r2 = 2;
                     }
-                    // System.out.println("\nr2 = " + r2);
+                    
                     System.out.println(r2);
+
+                    long endTime = System.nanoTime();
+                    long entire_duration = (endTime - startStartTime) / 1000000;
+                    long duration = (endTime - startTime) / 1000000;
+                    // System.out.println("entire thing took " + entire_duration + " milliseconds");
+                    // System.out.println("algo took " + duration + " milliseconds");
+
                     System.exit(0); //we're done
                 }
 
@@ -130,14 +138,21 @@ class Main{
                         continue;
                     }
                     else{
-                        if (which_part == 2 && men_preferences.get(i).size() == 0 && marriage_records[m0_fav_woman][1] == -1) {
+                        if (which_part == 2 && men_preferences.get(i).size() == 0) {
                                 r2 = 1;
                                 System.out.println(r2); 
+                                
+                                long endTime = System.nanoTime();
+                                long entire_duration = (endTime - startStartTime) / 1000000;
+                                long duration = (endTime - startTime) / 1000000;
+                                // System.out.println("entire thing took " + entire_duration + " milliseconds");
+                                // System.out.println("algo took " + duration + " milliseconds");
+
                                 System.exit(0); //we're done
                         }
                         int propose_woman = men_preferences.get(i).remove();
                         int woman_status = marriage_records[propose_woman][1];
-                        int man_ranking_by_woman = women_preferences.get(propose_woman).get(i);
+                        int man_ranking_by_woman = women_preferences[propose_woman][i];
                         if (which_part == 2 && i == 0 && propose_woman == m0_fav_woman) { // man 0 gets rejected by his favorite woman
                             continue;
                         }
