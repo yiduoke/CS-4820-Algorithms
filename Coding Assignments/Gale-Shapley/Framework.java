@@ -46,13 +46,17 @@ class Main{
     
         // populating mens' preference queues
         ArrayList<Queue<Integer>> men_preferences = new ArrayList<Queue<Integer>>(num_pairs);
+        ArrayList<Queue<Integer>> men_preferences_clone = new ArrayList<Queue<Integer>>(num_pairs);
         for (int i = 0; i < num_pairs; i++) {
             Queue<Integer> current_man_preferences = new LinkedList<Integer>();
+            Queue<Integer> current_man_preferences_clone = new LinkedList<Integer>();
             for (int j=0; j < num_pairs; j++){
                 int item = all_numbers.remove();
                 current_man_preferences.add(item);
+                current_man_preferences_clone.add(item);
             }
             men_preferences.add(current_man_preferences);
+            men_preferences_clone.add(current_man_preferences_clone);
         }
         
         int m0_fav_woman = men_preferences.get(0).peek(); //to be used for r2
@@ -72,6 +76,7 @@ class Main{
         int r1;
         int r2;
         int which_part = 1;
+        int old_rank = -1;
         //1st column details each man's spouse; -1 means he's single
         // 2nd column details each woman's current man's rank in her heart; -1 means she's single
         // 3rd column details each woman's current man's identity; -1 means she's single
@@ -87,7 +92,7 @@ class Main{
             if (first_single_man == -1){ //no more single men!! yay!!
                 if (which_part == 2){
                     int new_rank = marriage_records[m0_fav_woman][1];
-                    if (new_rank <= marriage_records[m0_fav_woman][1]){
+                    if (new_rank <= old_rank){
                         r2 = 3;
                     }
                     else{
@@ -95,13 +100,21 @@ class Main{
                     }
                     // System.out.println("\nr2 = " + r2);
                     System.out.println(r2);
-                    break; //we're done
+                    System.exit(0); //we're done
                 }
-                // System.out.println("\nr0 = " + marriage_records[0][2]); //TODO: change this later to print to the other file
-                r1 = marriage_records[0][2];
-                System.out.println(r1); //TODO: change this later to print to the other file
-                which_part = 2; // move on to part 2 of the hw
-                break; //we're done
+
+                else{
+                    r1 = marriage_records[0][2];
+                    System.out.println(r1); //TODO: change this later to print to the other file
+                    which_part = 2; // move on to part 2 of the hw
+                    old_rank = marriage_records[m0_fav_woman][1];
+                    for (int i = 0; i < num_pairs; i++){
+                        marriage_records[i][0] = -1;
+                        marriage_records[i][1] = -1;
+                        marriage_records[i][2] = -1;
+                    }
+                    men_preferences = men_preferences_clone;
+                }
             }
             else{//proceed
                 for (int i = first_single_man; i < num_pairs; i++){ // starting with the first single man by index
@@ -111,7 +124,6 @@ class Main{
                     else{
                         if (which_part == 2 && men_preferences.get(i).size() == 0 && marriage_records[m0_fav_woman][1] == -1) {
                                 r2 = 1;
-                                // System.out.println("\nr2 = " + r2); //TODO: change this later to print to the other file
                                 System.out.println(r2); 
                                 System.exit(0); //we're done
                         }
