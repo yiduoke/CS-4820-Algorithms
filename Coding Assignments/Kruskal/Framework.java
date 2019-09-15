@@ -67,6 +67,8 @@ class Main{
         }
 
         long startTime = System.nanoTime();
+
+
         /////////////////////////////////the actual algorithm now//////////////////////////////////
 
         sortbyColumn(edges, 2); //sort edges by increasing value
@@ -83,14 +85,16 @@ class Main{
             }
             else{
                 if (component_sizes[node1] <= component_sizes[node2]){
+                    component_sizes[components[node2]] += component_sizes[components[node1]];
+                    component_sizes[components[node1]] = 0;
+
                     components[node1] = components[node2];
-                    component_sizes[node2] += component_sizes[node1];
-                    component_sizes[node1] = 0;
                 }
                 else{
+                    component_sizes[components[node1]] += component_sizes[components[node2]];
+                    component_sizes[components[node2]] = 0;
+
                     components[node2] = components[node1];
-                    component_sizes[node1] += component_sizes[node2];
-                    component_sizes[node2] = 0;
                 }
                 current_edge++;
                 num_connected_edges++;
