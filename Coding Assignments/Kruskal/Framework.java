@@ -73,7 +73,7 @@ class Main{
 
         int current_edge = 0;
         int num_connected_edges = 0;
-        while (num_connected_edges < num_edges - 3){
+        while (num_connected_edges < num_nodes - 3){
             int node1 = edges[current_edge][0];
             int node2 = edges[current_edge][1];
 
@@ -96,10 +96,10 @@ class Main{
                 num_connected_edges++;
             }
         }
-        
-        Arrays.sort(components);
-        System.out.println(components[num_nodes-3]);
-        System.out.println(components[num_nodes-2]);
-        System.out.println(components[num_nodes-1]);
+
+        Arrays.sort(component_sizes);
+        System.out.println(component_sizes[num_nodes-3]);
+        System.out.println(component_sizes[num_nodes-2]);
+        System.out.println(component_sizes[num_nodes-1]);
     }
 }
