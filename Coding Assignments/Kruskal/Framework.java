@@ -84,7 +84,7 @@ class Main{
                 continue;
             }
             else{
-                if (component_sizes[node1] <= component_sizes[node2]){
+                if (component_sizes[components[node1]] <= component_sizes[components[node2]]){
                     component_sizes[components[node2]] += component_sizes[components[node1]];
                     component_sizes[components[node1]] = 0;
 
