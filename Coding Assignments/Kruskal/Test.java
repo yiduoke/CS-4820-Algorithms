@@ -14,27 +14,16 @@ class Test {
     }
     
     public static void main (String[] args){
-        Random random = new Random();
+        Integer one = Integer.valueOf(1);
+        Integer two = Integer.valueOf(2);
+        Integer three = Integer.valueOf(3);
+        Integer four = Integer.valueOf(4);
 
-        int[][] meow = new int[3][3];
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 3; j++){
-                meow[i][j] = random.nextInt(34);
-                System.out.print(meow[i][j] + ", ");
-            }
-            System.out.println();
-        }
-        System.out.println();
+        two = one;
+        three = two;
 
-
-        sortbyColumn(meow, 0);
-
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 3; j++){
-                
-                System.out.print(meow[i][j] + ", ");
-            }
-            System.out.println();
-        }
+        System.out.println(one);
+        System.out.println(two);
+        System.out.println(three);
     }
 }

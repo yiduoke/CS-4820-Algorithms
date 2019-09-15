@@ -10,7 +10,7 @@ class Main{
     /**
         sorts 2D int array [arr] by column [col]
      */
-    public static void sortbyColumn(int arr[][], int col){ 
+    public static void sortbyColumn(int[][] arr, int col){ 
             // Using built-in sort function Arrays.sort 
         Arrays.sort(arr, new Comparator<int[]>() { 
                 
@@ -28,7 +28,7 @@ class Main{
         int num_nodes = 0;
         int num_edges = 0;
 
-        int[] components = new int[1]; // components[i] is the component that node [i] belongs to
+        Integer[] components = new Integer[1]; // components[i] is the component that node [i] belongs to
         int[] component_sizes = new int[1]; // component_sizes[i] is the size of the [i]th component
         int[][] edges = new int[1][1];
 
@@ -42,10 +42,10 @@ class Main{
             String str2 = inputStream.readLine();
             num_edges = Integer.parseInt(str2);
 
-            components = new int[num_nodes];
+            components = new Integer[num_nodes];
             component_sizes = new int[num_nodes];
             for (int i = 0; i < num_nodes; i++){
-                components[i] = i;
+                components[i] = Integer.valueOf(i);
                 component_sizes[i] = 1;
             }
 
@@ -69,5 +69,37 @@ class Main{
         long startTime = System.nanoTime();
         /////////////////////////////////the actual algorithm now//////////////////////////////////
 
+        sortbyColumn(edges, 2); //sort edges by increasing value
+
+        int current_edge = 0;
+        int num_connected_edges = 0;
+        while (num_connected_edges < num_edges - 3){
+            int node1 = edges[current_edge][0];
+            int node2 = edges[current_edge][1];
+
+            if (components[node1] == components[node2]){
+                current_edge++;
+                continue;
+            }
+            else{
+                if (component_sizes[node1] <= component_sizes[node2]){
+                    components[node1] = components[node2];
+                    component_sizes[node2] += component_sizes[node1];
+                    component_sizes[node1] = 0;
+                }
+                else{
+                    components[node2] = components[node1];
+                    component_sizes[node1] += component_sizes[node2];
+                    component_sizes[node2] = 0;
+                }
+                current_edge++;
+                num_connected_edges++;
+            }
+        }
+        
+        Arrays.sort(components);
+        System.out.println(components[num_nodes-3]);
+        System.out.println(components[num_nodes-2]);
+        System.out.println(components[num_nodes-1]);
     }
 }
