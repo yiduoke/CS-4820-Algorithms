@@ -28,8 +28,8 @@ class Main{
         int num_nodes = 0;
         int num_edges = 0;
 
-        int[] components; // components[i] is the component that node [i] belongs to
-        int[] component_sizes; // component_sizes[i] is the size of the [i]th component
+        int[] components = new int[1]; // components[i] is the component that node [i] belongs to
+        int[] component_sizes = new int[1]; // component_sizes[i] is the size of the [i]th component
         int[][] edges = new int[1][1];
 
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in));
@@ -44,6 +44,11 @@ class Main{
 
             components = new int[num_nodes];
             component_sizes = new int[num_nodes];
+            for (int i = 0; i < num_nodes; i++){
+                components[i] = i;
+                component_sizes[i] = 1;
+            }
+
             edges = new int[num_edges][3];
 
             for (int i = 0; i < num_edges; i++){
@@ -59,17 +64,6 @@ class Main{
 
         catch(java.io.IOException ex){
             System.out.println("bad file");
-        }
-
-        System.out.println(num_nodes + " nodes");
-        System.out.println(num_edges + " edges");
-        System.out.println("edges:");
-
-        for (int i = 0; i < num_edges; i++){
-            for (int j = 0; j < 3; j++){
-                System.out.print(edges[i][j] + ", ");
-            }
-            System.out.println();
         }
 
         long startTime = System.nanoTime();
