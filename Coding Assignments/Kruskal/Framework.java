@@ -7,6 +7,18 @@ import java.io.InputStreamReader;
 
 
 class Main{
+
+    // a Number class because Java doesn't have pointers; using this for faster union
+    public class Number{
+        int value;
+        Number(int value){
+            this.value = value;
+        }
+        public String toString() {
+            return "" + value;
+        }
+    }
+
     /**
         sorts 2D int array [arr] by column [col]
      */
@@ -22,10 +34,10 @@ class Main{
         });
     }
 
-    public static void transform_component(int[] components, int source, int dest){
+    public static void transform_component(Main.Number[] components, int source, int dest){
         for (int i = 0; i < components.length; i++){
-            if (components[i] == source){
-                components[i] = dest;
+            if (components[i].value == source){
+                components[i].value = dest;
             }
         }
     }
@@ -37,7 +49,10 @@ class Main{
         int num_edges = 0;
 
         // Integer[] components = new Integer[1]; // components[i] is the component that node [i] belongs to
-        int[] components = new int[1];
+        // int[] components = new int[1];
+        Main o = new Main();
+        
+        Main.Number[] components = new Main.Number[1];
 
         int[] component_sizes = new int[1]; // component_sizes[i] is the size of the [i]th component
         int[][] edges = new int[1][1];
@@ -53,12 +68,14 @@ class Main{
             num_edges = Integer.parseInt(str2);
 
             // components = new Integer[num_nodes];
-            components = new int[num_nodes];
+            // components = new int[num_nodes];
+            components = new Main.Number[num_nodes];
 
             component_sizes = new int[num_nodes];
             for (int i = 0; i < num_nodes; i++){
                 // components[i] = Integer.valueOf(i);
-                components[i] = i;
+                // components[i] = i;
+                components[i] = o.new Number(i);
 
                 component_sizes[i] = 1;
             }
@@ -93,27 +110,33 @@ class Main{
             int node1 = edges[current_edge][0];
             int node2 = edges[current_edge][1];
 
-            if (components[node1] == components[node2]){
+            if (components[node1]==components[node2]){
                 current_edge++;
                 continue;
             }
             else{
-                if (component_sizes[components[node1]] >= component_sizes[components[node2]]){
+                if (component_sizes[(components[node1]).value] >= component_sizes[(components[node2]).value]){
 
-                    component_sizes[components[node1]] += component_sizes[components[node2]];
-                    component_sizes[components[node2]] = 0;
+                    // System.out.println(component_sizes[(components[node1]).value]);
+                    component_sizes[(components[node1]).value] += component_sizes[(components[node2]).value];
+                    component_sizes[(components[node2]).value] = 0;
+                    // System.out.println(component_sizes[(components[node1]).value]+"\n");
 
-                    // components[node2] = components[node1];
-                    transform_component(components, components[node2], components[node1]);
+                    // (components[node2]).value = (components[node1]).value;
+                    components[(components[node2]).value] = components[node1];
+                    // transform_component(components, (components[node2]).value, (components[node1]).value);
 
                     
                 }
                 else{
-                    component_sizes[components[node2]] += component_sizes[components[node1]];
-                    component_sizes[components[node1]] = 0;
+                    // System.out.println(component_sizes[(components[node2]).value]);
+                    component_sizes[(components[node2]).value] += component_sizes[(components[node1]).value];
+                    component_sizes[(components[node1]).value] = 0;
+                    // System.out.println(component_sizes[(components[node2]).value]+"\n");
 
-                    // components[node1] = components[node2];
-                    transform_component(components, components[node1], components[node2]);
+                    // (components[node1]).value = (components[node2]).value;
+                    components[(components[node1]).value] = components[node2];
+                    // transform_component(components, (components[node1]).value, (components[node2]).value);
                 }
                 current_edge++;
                 num_connected_edges++;
