@@ -9,14 +9,21 @@ import java.io.InputStreamReader;
 class Main{
 
     // a Number class because Java doesn't have pointers; using this for faster union
-    public class Number{
-        int value;
-        Number(int value){
-            this.value = value;
+    class Node implements Comparable<Node> {
+        int pointing_to;
+        int component_size;
+
+        public int compareTo(Node other){
+            return this.component_size - other.component_size;
         }
-        public String toString() {
-            return "" + value;
+    }
+
+    // using pointers and path compression
+    public static int ancestor(Node[] nodes, int i){
+        if (nodes[i].pointing_to != i){
+            nodes[i].pointing_to = ancestor(nodes, nodes[i].pointing_to);
         }
+        return nodes[i].pointing_to;
     }
 
     /**
@@ -34,14 +41,6 @@ class Main{
         });
     }
 
-    public static void transform_component(Main.Number[] components, int source, int dest){
-        for (int i = 0; i < components.length; i++){
-            if (components[i].value == source){
-                components[i].value = dest;
-            }
-        }
-    }
-
     public static void main(String[] args){
 
         // initializing the data structures
@@ -52,9 +51,9 @@ class Main{
         // int[] components = new int[1];
         Main o = new Main();
         
-        Main.Number[] components = new Main.Number[1];
+        Main.Node[] components = new Main.Node[1];
 
-        int[] component_sizes = new int[1]; // component_sizes[i] is the size of the [i]th component
+        // int[] component_sizes = new int[1]; // component_sizes[i] is the size of the [i]th component
         int[][] edges = new int[1][1];
 
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in));
@@ -69,15 +68,18 @@ class Main{
 
             // components = new Integer[num_nodes];
             // components = new int[num_nodes];
-            components = new Main.Number[num_nodes];
+            components = new Main.Node[num_nodes];
 
-            component_sizes = new int[num_nodes];
+            // component_sizes = new int[num_nodes];
             for (int i = 0; i < num_nodes; i++){
                 // components[i] = Integer.valueOf(i);
                 // components[i] = i;
-                components[i] = o.new Number(i);
+                Main.Node current_node = o.new Node();
+                current_node.pointing_to = i;
+                current_node.component_size = 1;
+                components[i] = current_node;
 
-                component_sizes[i] = 1;
+                // component_sizes[i] = 1;
             }
 
             edges = new int[num_edges][3];
@@ -107,35 +109,36 @@ class Main{
         int current_edge = 0;
         int num_connected_edges = 0;
         while (num_connected_edges < num_nodes - 3){
-            int node1 = edges[current_edge][0];
-            int node2 = edges[current_edge][1];
+            int node1 = ancestor(components, edges[current_edge][0]);
+            int node2 = ancestor(components, edges[current_edge][1]);
 
-            if (components[node1]==components[node2]){
+            if (components[node1].pointing_to==components[node2].pointing_to){
                 current_edge++;
                 continue;
             }
             else{
-                if (component_sizes[(components[node1]).value] >= component_sizes[(components[node2]).value]){
+                // if (component_sizes[(components[node1]).value] >= component_sizes[(components[node2]).value]){
+                if (components[node1].component_size >= components[node2].component_size){
 
                     // System.out.println(component_sizes[(components[node1]).value]);
-                    component_sizes[(components[node1]).value] += component_sizes[(components[node2]).value];
-                    component_sizes[(components[node2]).value] = 0;
+                    (components[node1]).component_size += (components[node2]).component_size;
+                    (components[node2]).component_size = 0;
                     // System.out.println(component_sizes[(components[node1]).value]+"\n");
 
                     // (components[node2]).value = (components[node1]).value;
-                    components[(components[node2]).value] = components[node1];
+                    components[node2].pointing_to = node1;
                     // transform_component(components, (components[node2]).value, (components[node1]).value);
 
                     
                 }
                 else{
                     // System.out.println(component_sizes[(components[node2]).value]);
-                    component_sizes[(components[node2]).value] += component_sizes[(components[node1]).value];
-                    component_sizes[(components[node1]).value] = 0;
+                    (components[node2]).component_size += components[node1].component_size;
+                    (components[node1]).component_size = 0;
                     // System.out.println(component_sizes[(components[node2]).value]+"\n");
 
                     // (components[node1]).value = (components[node2]).value;
-                    components[(components[node1]).value] = components[node2];
+                    components[node1].pointing_to = node2;
                     // transform_component(components, (components[node1]).value, (components[node2]).value);
                 }
                 current_edge++;
@@ -153,9 +156,9 @@ class Main{
             // System.out.println();
         }
 
-        Arrays.sort(component_sizes);
-        System.out.println(component_sizes[num_nodes-3]);
-        System.out.println(component_sizes[num_nodes-2]);
-        System.out.println(component_sizes[num_nodes-1]);
+        Arrays.sort(components);
+        System.out.println((components[num_nodes-3]).component_size);
+        System.out.println((components[num_nodes-2]).component_size);
+        System.out.println((components[num_nodes-1]).component_size);
     }
 }
