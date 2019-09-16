@@ -34,7 +34,7 @@ class Main{
         Arrays.sort(arr, new Comparator<int[]>() { 
                 
             @Override              
-                // Compare values according to columns 
+            // Compare values according to columns 
             public int compare(int[] arr1, int[] arr2) { 
                 return arr1[col] - arr2[col];
             }  // End of function call sort(). 
@@ -47,13 +47,10 @@ class Main{
         int num_nodes = 0;
         int num_edges = 0;
 
-        // Integer[] components = new Integer[1]; // components[i] is the component that node [i] belongs to
-        // int[] components = new int[1];
         Main o = new Main();
         
         Main.Node[] components = new Main.Node[1];
 
-        // int[] component_sizes = new int[1]; // component_sizes[i] is the size of the [i]th component
         int[][] edges = new int[1][1];
 
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in));
@@ -117,43 +114,23 @@ class Main{
                 continue;
             }
             else{
-                // if (component_sizes[(components[node1]).value] >= component_sizes[(components[node2]).value]){
                 if (components[node1].component_size >= components[node2].component_size){
 
-                    // System.out.println(component_sizes[(components[node1]).value]);
                     (components[node1]).component_size += (components[node2]).component_size;
                     (components[node2]).component_size = 0;
-                    // System.out.println(component_sizes[(components[node1]).value]+"\n");
-
-                    // (components[node2]).value = (components[node1]).value;
                     components[node2].pointing_to = node1;
-                    // transform_component(components, (components[node2]).value, (components[node1]).value);
 
                     
                 }
                 else{
-                    // System.out.println(component_sizes[(components[node2]).value]);
                     (components[node2]).component_size += components[node1].component_size;
                     (components[node1]).component_size = 0;
-                    // System.out.println(component_sizes[(components[node2]).value]+"\n");
 
-                    // (components[node1]).value = (components[node2]).value;
                     components[node1].pointing_to = node2;
-                    // transform_component(components, (components[node1]).value, (components[node2]).value);
                 }
                 current_edge++;
                 num_connected_edges++;
             }
-            // System.out.println("components:");
-            // for (int i = 0; i < num_nodes; i++){
-            //     System.out.print(components[i] + ", ");
-            // }
-            // System.out.print("      ");
-            // System.out.print("component_sizes:");
-            // for (int i = 0; i < num_nodes; i++){
-            //     System.out.print(component_sizes[i] + ", ");
-            // }
-            // System.out.println();
         }
 
         Arrays.sort(components);
