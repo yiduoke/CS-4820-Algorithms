@@ -1,4 +1,0 @@
-610
-3
-entire thing took 844 milliseconds
-algo took 39 milliseconds
