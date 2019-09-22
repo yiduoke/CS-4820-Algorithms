@@ -28,8 +28,6 @@ class Main{
             M = Integer.parseInt(nMm[1]);
             m = Integer.parseInt(nMm[2]);
 
-            System.out.println("n, M, m: " + n + ", " + M + ", " + m);
-
             Opt = new long[M+1];
             solutions = new ArrayList[M+1];
 
@@ -39,8 +37,6 @@ class Main{
 
                 int station = Integer.parseInt(station_and_cost[0]);
                 int cost = Integer.parseInt(station_and_cost[1]);
-
-                System.out.println("station " + station + ", cost " + cost);
                 
                 Opt[station] = cost;
                 if (station <= m){
