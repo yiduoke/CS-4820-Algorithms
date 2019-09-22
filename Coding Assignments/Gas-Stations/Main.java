@@ -10,10 +10,18 @@ class Main{
 
     static int min_index(long[] array, int start_inclusive, int end_inclusive){
       int min_index = start_inclusive;
-      long min = array[min_index];
+      long min = array[start_inclusive];
+
+      for (int i = start_inclusive; i <= end_inclusive; i++){
+          if (array[i] != 0){
+              min_index = i;
+              min = array[i];
+              break;
+          }
+      }
      
       for(int i = min_index; i <= end_inclusive; i++) {
-         if(array[i] < min) {
+         if(array[i] < min && array[i] != 0) {
             min = array[i];
             min_index = i;
          }
@@ -87,7 +95,8 @@ class Main{
         System.out.println(Opt[min_cost_station]);
         ArrayList<Integer> opt_solution = Solutions[min_cost_station];
         for (int i = 0; i < opt_solution.size(); i++){
-            System.out.println(opt_solution.get(i));
+            System.out.print(opt_solution.get(i) + " ");
         }
+        System.out.println();
     }
 }
