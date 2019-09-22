@@ -8,11 +8,14 @@ import java.io.InputStreamReader;
 
 class Test{
     public static void main(String[] args){
-        long meow = Long.MAX_VALUE;
-        System.out.println(meow);
+        LinkedList<Integer> meow = new LinkedList<Integer>();
+        meow.add(5);
+        meow.add(2);
+        meow.add(3);
+        meow.add(6);
+        meow.add(1);
 
-        long[] woof = {1,2,5,7,2,1};
-        Arrays.sort(woof);
-        System.out.println(woof[0]);
+        meow.remove();
+        meow.forEach(System.out::println);
     }
 }
