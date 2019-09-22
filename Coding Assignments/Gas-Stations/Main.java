@@ -9,7 +9,16 @@ import java.io.InputStreamReader;
 class Main{
 
     static int min_index(long[] array, int start_inclusive, int end_inclusive){
-        return 0;
+      int min_index = start_inclusive;
+      long min = array[min_index];
+     
+      for(int i = min_index; i <= end_inclusive; i++) {
+         if(array[i] < min) {
+            min = array[i];
+            min_index = i;
+         }
+      }
+      return min_index;
     }
 
     public static void main(String[] args){
