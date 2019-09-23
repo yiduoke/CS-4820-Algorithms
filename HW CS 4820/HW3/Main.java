@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Map.Entry;
 import java.io.Reader;
 import java.io.Writer;
 import java.io.BufferedReader;
@@ -83,15 +84,13 @@ class Main{
 
 
         /////////////////////////////////the actual algorithm now//////////////////////////////////
-        TreeMap<Station,Integer> minHeap = new TreeMap<Station,Integer>(); // used to be a min heap so I didn't change the name
-        // the Integer value doesn't matter; i don't know how to get them to sort by the 2nd integer
-
+        TreeMap<Station,Integer> minHeap = new TreeMap<Station,Integer>(); //TODO: change the name
         // for (int i = 1; i <= m; i++){
         //     minHeap.put(stations[i], 1); 
         // }
         int until_m = 0;
         while (stations[until_m].location <= m){
-            minHeap.put(stations[until_m], 1);
+            minHeap.put(stations[until_m], until_m);
             until_m++;
         }
 
@@ -109,26 +108,28 @@ class Main{
         // }
 //////////////////////////////
         for (int i = until_m; i < n; i++){
-            Main.Station min_station = minHeap.firstKey();
-            while(min_station.location < stations[i].location - m){
-                minHeap.remove(min_station);
-                min_station = minHeap.firstKey();
+            // Main.Station min_station = minHeap.firstKey();
+            Entry<Station, Integer> min_station = minHeap.firstEntry();
+            while(min_station.getKey().location < stations[i].location - m){
+                minHeap.remove(min_station.getKey());
+                min_station = minHeap.firstEntry();
             }
-            Opt[i] = Opt[i] + min_station.cost;
+            Opt[i] = Opt[i] + min_station.getKey().cost;
             stations[i].cost = Opt[i];
-            ArrayList<Integer> prev_solution = (ArrayList<Integer>) (Solutions[min_station.location]).clone();
-            prev_solution.add(i);
+            // System.out.println("mins_station: " + min_station.location);
+            ArrayList<Integer> prev_solution = (ArrayList<Integer>) (Solutions[min_station.getValue()]).clone();
+            prev_solution.add(stations[i].location);
             Solutions[i] = prev_solution;
-            minHeap.put(stations[i], 1);
+            minHeap.put(stations[i], i);
         }
     
-        int min_cost_station = minHeap.firstKey().location;
+        Entry<Station, Integer> min_cost_station = minHeap.firstEntry();
         // if (Opt[M-m] != 0 && Opt[M-m] < minHeap.firstKey().cost){
         //     min_cost_station = M-m;
         // }
 
-        System.out.println(Opt[min_cost_station]);
-        ArrayList<Integer> opt_solution = Solutions[min_cost_station];
+        System.out.println(Opt[min_cost_station.getValue()]);
+        ArrayList<Integer> opt_solution = Solutions[min_cost_station.getValue()];
         int i;
         for (i = 0; i < opt_solution.size()-1; i++){
             System.out.print(opt_solution.get(i) + " ");
