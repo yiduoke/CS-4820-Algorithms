@@ -87,13 +87,17 @@ class Main{
 
         /////////////////////////////////the actual algorithm now//////////////////////////////////
 
-        PriorityQueue<Station> minHeap = new PriorityQueue<Station>(m);
+        // PriorityQueue<Station> minHeap = new PriorityQueue<Station>(m);
+        TreeMap<Station,Integer> minHeap = new TreeMap<Station,Integer>(); // used to be a min heap so I didn't change the name
+        // the Integer value doesn't matter; i don't know how to get them to sort by the 2nd integer
+
         for (int i = 1; i <= m; i++){
-            minHeap.add(stations[i]);
+            minHeap.put(stations[i], 1); 
         }
 
         for (int i = m+1; i <= M; i++){
-            Main.Station min_station = minHeap.peek();
+            // Main.Station min_station = minHeap.peek();
+            Main.Station min_station = minHeap.firstKey();
             minHeap.remove(stations[i-m]);
             if (Opt[i] != 0){
                 Opt[i] = Opt[i] + min_station.cost;
@@ -103,11 +107,12 @@ class Main{
                 Solutions[i] = prev_solution;
             }
 
-            minHeap.add(stations[i]);
+            minHeap.put(stations[i], 1);
         }
         
-        int min_cost_station = minHeap.peek().location;
-        if (Opt[M-m] != 0 && Opt[M-m] < minHeap.peek().cost){
+        // int min_cost_station = minHeap.peek().location;
+        int min_cost_station = minHeap.firstKey().location;
+        if (Opt[M-m] != 0 && Opt[M-m] < minHeap.firstKey().cost){
             min_cost_station = M-m;
         }
 
