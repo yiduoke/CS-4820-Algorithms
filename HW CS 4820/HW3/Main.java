@@ -46,14 +46,7 @@ class Main{
             Solutions = new ArrayList[M+1];
             stations = new Main.Station[M+1];
 
-            for (int i = 0; i <= M; i++){
-                Main.Station meow = o.new Station();
-                meow.location = i;
-                meow.cost = Integer.MAX_VALUE;
-                stations[i] = meow;
-            }
-
-
+            int current_station = 0;
             for (int i = 0; i < n; i++){
                 line = inputStream.readLine();
                 String[] station_and_cost = line.split(" ");
@@ -68,11 +61,26 @@ class Main{
                 meow.cost = cost;
                 stations[station] = meow;
 
+                for (int j = current_station; j < station; j++){
+                    meow = o.new Station();
+                    meow.location = j;
+                    meow.cost = Integer.MAX_VALUE;
+                    stations[j] = meow;
+                }
+                current_station = station + 1;
+
                 if (station <= m){
                     ArrayList<Integer> solution_now = new ArrayList<Integer>();
                     solution_now.add(station);
                     Solutions[station] = solution_now;
                 }
+            }
+
+            for (int i = current_station; i <= M; i++){
+                Main.Station meow = o.new Station();
+                meow.location = i;
+                meow.cost = Integer.MAX_VALUE;
+                stations[i] = meow;
             }
 
             inputStream.close();
@@ -86,8 +94,6 @@ class Main{
 
 
         /////////////////////////////////the actual algorithm now//////////////////////////////////
-
-        // PriorityQueue<Station> minHeap = new PriorityQueue<Station>(m);
         TreeMap<Station,Integer> minHeap = new TreeMap<Station,Integer>(); // used to be a min heap so I didn't change the name
         // the Integer value doesn't matter; i don't know how to get them to sort by the 2nd integer
 
@@ -96,7 +102,6 @@ class Main{
         }
 
         for (int i = m+1; i <= M; i++){
-            // Main.Station min_station = minHeap.peek();
             Main.Station min_station = minHeap.firstKey();
             minHeap.remove(stations[i-m]);
             if (Opt[i] != 0){
@@ -110,7 +115,6 @@ class Main{
             minHeap.put(stations[i], 1);
         }
         
-        // int min_cost_station = minHeap.peek().location;
         int min_cost_station = minHeap.firstKey().location;
         if (Opt[M-m] != 0 && Opt[M-m] < minHeap.firstKey().cost){
             min_cost_station = M-m;
