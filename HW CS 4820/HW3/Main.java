@@ -8,33 +8,25 @@ import java.io.InputStreamReader;
 
 class Main{
 
-    static int min_index(long[] array, int start_inclusive, int end_inclusive){
-      int min_index = start_inclusive;
-      long min = array[start_inclusive];
+    class Station implements Comparable<Station> {
+        int location;
+        long cost = Long.MAX_VALUE;
 
-      for (int i = start_inclusive; i <= end_inclusive; i++){
-          if (array[i] != 0){
-              min_index = i;
-              min = array[i];
-              break;
-          }
-      }
-     
-      for(int i = min_index; i <= end_inclusive; i++) {
-         if(array[i] < min && array[i] != 0) {
-            min = array[i];
-            min_index = i;
-         }
-      }
-      return min_index;
+        public int compareTo(Station other){
+            return (int) (this.cost - other.cost);
+        }
     }
 
     public static void main(String[] args){
 
+        Main o = new Main();
+        Main.Station[] stations = new Main.Station[1];
+
         // initializing the data structures
         long[] Opt = new long[1]; // minimum cost up until each station
         ArrayList<Integer>[] Solutions = new ArrayList[1]; //solution up until each station
-        int[] solution_index;
+        
+
         int M = 0; // total highway length
         int m = 0; // max distance between each station
         int n = 0; // number of stations possible
@@ -52,16 +44,30 @@ class Main{
 
             Opt = new long[M+1];
             Solutions = new ArrayList[M+1];
-            solution_index = new int[M+1];
+            stations = new Main.Station[M+1];
+
+            for (int i = 0; i <= M; i++){
+                Main.Station meow = o.new Station();
+                meow.location = i;
+                meow.cost = Integer.MAX_VALUE;
+                stations[i] = meow;
+            }
+
 
             for (int i = 0; i < n; i++){
                 line = inputStream.readLine();
                 String[] station_and_cost = line.split(" ");
 
                 int station = Integer.parseInt(station_and_cost[0]);
-                long cost = Integer.parseInt(station_and_cost[1]);
+                int cost = Integer.parseInt(station_and_cost[1]);
                 
                 Opt[station] = cost;
+
+                Main.Station meow = o.new Station();
+                meow.location = station;
+                meow.cost = cost;
+                stations[station] = meow;
+
                 if (station <= m){
                     ArrayList<Integer> solution_now = new ArrayList<Integer>();
                     solution_now.add(station);
@@ -81,17 +87,30 @@ class Main{
 
         /////////////////////////////////the actual algorithm now//////////////////////////////////
 
-        for (int i = m+1; i < M; i++){
+        PriorityQueue<Station> minHeap = new PriorityQueue<Station>(m);
+        for (int i = 1; i <= m; i++){
+            minHeap.add(stations[i]);
+        }
+
+        for (int i = m+1; i <= M; i++){
+            Main.Station min_station = minHeap.peek();
+            minHeap.remove(stations[i-m]);
             if (Opt[i] != 0){
-                int min_station = min_index(Opt, i-m, i-1); //TODO: write min_index(int array, int start, int end) later
-                Opt[i] = Opt[i] + Opt[min_station];
-                ArrayList<Integer> prev_solution = (ArrayList<Integer>) (Solutions[min_station]).clone();
+                Opt[i] = Opt[i] + min_station.cost;
+                stations[i].cost = Opt[i];
+                ArrayList<Integer> prev_solution = (ArrayList<Integer>) (Solutions[min_station.location]).clone();
                 prev_solution.add(i);
                 Solutions[i] = prev_solution;
             }
+
+            minHeap.add(stations[i]);
+        }
+        
+        int min_cost_station = minHeap.peek().location;
+        if (Opt[M-m] != 0 && Opt[M-m] < minHeap.peek().cost){
+            min_cost_station = M-m;
         }
 
-        int min_cost_station = min_index(Opt, M-m, M);
         System.out.println(Opt[min_cost_station]);
         ArrayList<Integer> opt_solution = Solutions[min_cost_station];
         int i;
