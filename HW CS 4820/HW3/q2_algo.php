@@ -25,7 +25,7 @@ Opt-Matrix-Multiplication:
 
                 M[starting_matrix][ending_matrix] = new_opt
                 S[starting_matrix][ending_matrix] = join(S[starting_matrix][middle_matrix],
-                                                         S[middle_matrix][ending_matrix])
+                                                         S[middle_matrix+1][ending_matrix])
                                                     .add(middle_matrix)
             endif
         endfor
