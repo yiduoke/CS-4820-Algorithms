@@ -29,6 +29,7 @@ Opt-Matrix-Multiplication:
                                                     .add(middle_matrix)
             endif
         endfor
+        diff++
     endfor
     minimum_runtime = M[1][m]
     order = S[1][m]
