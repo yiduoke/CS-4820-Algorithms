@@ -17,9 +17,9 @@ Opt-Matrix-Multiplication:
 
                 new_opt = (M[starting_matrix][middle_matrix] +
                            M[middle_matrix + 1][ending_matrix] +
-                           number of rows of starting_matrix +
-                           number of columns of middle_matrix +
-                           number of columns of ending_matrix)
+                           (number of rows of starting_matrix *
+                           number of columns of middle_matrix *
+                           number of columns of ending_matrix))
 
                 is minimized.
 
