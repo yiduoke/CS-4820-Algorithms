@@ -119,10 +119,16 @@ class Main
 
 		//YOUR CODE STARTS HERE
         
+        for (int i = 0; i<n-1; i++){
+            int current_recruiter = preliminaryAssignment[i];
+            recruiterCapacities[current_recruiter]--;
+        }
+        
         int s = n - 1;
+        boolean[] visited = new boolean[n+k];
         LinkedList<Integer> queue = new LinkedList<Integer>();
         
-        //    visited[s]=true;
+        visited[s] = true;
         queue.add(s);
         
         while (queue.size() != 0){
@@ -132,21 +138,18 @@ class Main
                 if (recruiterCapacities[s] > 0){
                     existsValidAssignment = true;
                     validAssignment = preliminaryAssignment;
+                    break;
                 }
                 else{
                     bottleneckRecruiters[s] = 1;
-                    int count = 0;
                     Iterator<Integer> i = neighbors.get(s).listIterator();
                     while (i.hasNext()){
                         int candidate = i.next();
-                        if (preliminaryAssignment[candidate] == s){
+                        if (preliminaryAssignment[candidate] == s && !visited[candidate]){
+                            visited[candidate] = true;
                             preliminaryAssignment[candidate] = 0;
-                            count++;
                             queue.add(candidate);
                         }
-                    }
-                    if (count == 0) {
-                        existsValidAssignment = false;
                     }
                 }
             }
@@ -154,7 +157,8 @@ class Main
                 Iterator<Integer> i = neighbors.get(s).listIterator();
                 while (i.hasNext()){
                     int recruiter = i.next();
-                    if (preliminaryAssignment[s] != recruiter){
+                    if (preliminaryAssignment[s] != recruiter && !visited[recruiter]){
+                        visited[recruiter] = true;
                         preliminaryAssignment[s] = recruiter;
                         queue.add(recruiter);
                     }
