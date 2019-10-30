@@ -119,7 +119,7 @@ class Main
 
 		//YOUR CODE STARTS HERE
         
-        s = n - 1;
+        int s = n - 1;
         LinkedList<Integer> queue = new LinkedList<Integer>();
         
         //    visited[s]=true;
@@ -129,15 +129,14 @@ class Main
             s = queue.poll();
             
             if (s >= n){ // a recruiter
-                if (rec_caps[s] > 0){
+                if (recruiterCapacities[s] > 0){
                     existsValidAssignment = true;
                     validAssignment = preliminaryAssignment;
-                    break;
                 }
                 else{
                     bottleneckRecruiters[s] = 1;
                     int count = 0;
-                    Iterator<Integer> i = neighbors.get(s);
+                    Iterator<Integer> i = neighbors.get(s).listIterator();
                     while (i.hasNext()){
                         int candidate = i.next();
                         if (preliminaryAssignment[candidate] == s){
@@ -152,7 +151,7 @@ class Main
                 }
             }
             else{ // a candidate
-                Iterator<Integer> i = neighbors.get(s);
+                Iterator<Integer> i = neighbors.get(s).listIterator();
                 while (i.hasNext()){
                     int recruiter = i.next();
                     if (preliminaryAssignment[s] != recruiter){
