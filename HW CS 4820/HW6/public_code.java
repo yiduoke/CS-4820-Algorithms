@@ -12,61 +12,6 @@ import java.util.*;
 //   note: don't run the FF from the beginning; they give us a good attempt, so our residual graph will start there
 //if the max flow is less than the number of candidates, then bottleneck is all the recruiters n-1 could reach on the residual graph
 
-void BFS(int s, int[] bottleneck, int[] prelim, int[] rec_caps, ArrayList<ArrayList<Integer>> neighbors){
-//    boolean visited[] = new boolean[V];
-
-    LinkedList<Integer> queue = new LinkedList<Integer>();
-
-//    visited[s]=true;
-    queue.add(s);
-
-    while (queue.size() != 0){
-        s = queue.poll();
-
-        if (s >= n){ // a recruiter
-            if (rec_caps[s] > 0){
-                return prelim;
-            }
-            else{
-                bottleneck[s] = 1;
-                int count = 0;
-                Iterator<Integer> i = neighbors.get(s);
-                while (i.hasNext()){
-                    int candidate = i.next();
-                    if (prelim[candidate] == s){
-                        prelim[candidate] = 0;
-                        count++;
-                        queue.add(candidate);
-                    }
-                }
-                if (count == 0) {
-                    return bottleneck;
-                }
-            }
-        }
-        else{ // a candidate
-            Iterator<Integer> i = neighbors.get(s);
-            while (i.hasNext()){
-                int recruiter = i.next();
-                if (prelim[s] != recruiter){
-                    prelim[s] = recruiter;
-                    queue.add(recruiter);
-                }
-            }
-        }
-    }
-}
-//        Iterator<Integer> i = adj[s].listIterator();
-//        while (i.hasNext()){
-//            int n = i.next();
-//            if (!visited[n]){
-//                visited[n] = true;
-//                queue.add(n);
-//            }
-//        }
-    }
-}
-
 class Main
 {
 	int n; // number of candidates
@@ -173,6 +118,53 @@ class Main
 		bottleneckRecruiters = new int[n+k];
 
 		//YOUR CODE STARTS HERE
+        
+        s = n - 1;
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+        
+        //    visited[s]=true;
+        queue.add(s);
+        
+        while (queue.size() != 0){
+            s = queue.poll();
+            
+            if (s >= n){ // a recruiter
+                if (rec_caps[s] > 0){
+                    existsValidAssignment = true;
+                    validAssignment = preliminaryAssignment;
+                    break;
+                }
+                else{
+                    bottleneckRecruiters[s] = 1;
+                    int count = 0;
+                    Iterator<Integer> i = neighbors.get(s);
+                    while (i.hasNext()){
+                        int candidate = i.next();
+                        if (preliminaryAssignment[candidate] == s){
+                            preliminaryAssignment[candidate] = 0;
+                            count++;
+                            queue.add(candidate);
+                        }
+                    }
+                    if (count == 0) {
+                        existsValidAssignment = false;
+                    }
+                }
+            }
+            else{ // a candidate
+                Iterator<Integer> i = neighbors.get(s);
+                while (i.hasNext()){
+                    int recruiter = i.next();
+                    if (preliminaryAssignment[s] != recruiter){
+                        preliminaryAssignment[s] = recruiter;
+                        queue.add(recruiter);
+                    }
+                }
+            }
+        }
+        
+        
+        
 		//YOUR CODE ENDS HERE
 
 		output();
