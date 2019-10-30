@@ -4,13 +4,6 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.*;
 import java.util.*;
-// algorithm overview: bipartite graph but each recruiter can interview more than one candidate.
-//source -> candidates; each edge has capacity 1
-//candidate -> qualified recruiters; each edge has capacity 1
-//recruiters -> sink; each edge has capacity of the recruiter
-//if the max flow on this graph is the number of candidates, then True and return pairings
-//   note: don't run the FF from the beginning; they give us a good attempt, so our residual graph will start there
-//if the max flow is less than the number of candidates, then bottleneck is all the recruiters n-1 could reach on the residual graph
 
 class Main
 {
@@ -121,7 +114,6 @@ class Main
         
         for (int i = 0; i<n-1; i++){
             int current_recruiter = preliminaryAssignment[i];
-//            System.out.println("recruiter " + current_recruiter + " capacity: " + recruiterCapacities[current_recruiter]);
             recruiterCapacities[current_recruiter]--;
         }
         
@@ -152,7 +144,6 @@ class Main
                         if (preliminaryAssignment[candidate] == s && !visited[candidate]){
                             visited[candidate] = true;
                             preliminaryAssignment[candidate] = 0;
-//                            System.out.println("recruiter " + s + " interviews" + candidate);
                             queue.add(candidate);
                         }
                     }
@@ -166,7 +157,6 @@ class Main
                     if (preliminaryAssignment[s] != recruiter && !visited[recruiter]){
                         visited[recruiter] = true;
                         preliminaryAssignment[s] = recruiter;
-//                        System.out.println("candidate " + s + " is assigned to " + recruiter);
                         queue.add(recruiter);
                     }
                 }
