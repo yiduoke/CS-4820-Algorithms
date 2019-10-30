@@ -10,9 +10,7 @@ import java.util.*;
 //recruiters -> sink; each edge has capacity of the recruiter
 //if the max flow on this graph is the number of candidates, then True and return pairings
 //   note: don't run the FF from the beginning; they give us a good attempt, so our residual graph will start there
-//if the max flow is less than the number of candidates, then increase the capacity of EVERY QUALIFIED recruiter of
-//uninterviewed candidates by 1 ONLY ONCE (since many candidates can go to one recruiter and we can accidentally increase capacity by more
-//than 1) and run FF from that point every recruiter whose incoming flow increased by one is part of the answer!
+//if the max flow is less than the number of candidates, then bottleneck is all the recruiters n-1 could reach on the residual graph
 class Main
 {
 	int n; // number of candidates
