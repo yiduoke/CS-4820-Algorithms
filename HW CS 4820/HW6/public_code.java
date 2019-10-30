@@ -119,8 +119,9 @@ class Main
 
 		//YOUR CODE STARTS HERE
         
-        for (int i = 0; i<n; i++){
+        for (int i = 0; i<n-1; i++){
             int current_recruiter = preliminaryAssignment[i];
+//            System.out.println("recruiter " + current_recruiter + " capacity: " + recruiterCapacities[current_recruiter]);
             recruiterCapacities[current_recruiter]--;
         }
         
@@ -131,11 +132,14 @@ class Main
         visited[s] = true;
         queue.add(s);
         
+        int last_candidate = n-1;
+        
         while (queue.size() != 0){
             s = queue.poll();
             
             if (s >= n){ // a recruiter
                 if (recruiterCapacities[s] > 0){
+                    preliminaryAssignment[last_candidate] = s;
                     existsValidAssignment = true;
                     validAssignment = preliminaryAssignment;
                     break;
@@ -148,18 +152,21 @@ class Main
                         if (preliminaryAssignment[candidate] == s && !visited[candidate]){
                             visited[candidate] = true;
                             preliminaryAssignment[candidate] = 0;
+//                            System.out.println("recruiter " + s + " interviews" + candidate);
                             queue.add(candidate);
                         }
                     }
                 }
             }
             else{ // a candidate
+                last_candidate = s;
                 Iterator<Integer> i = neighbors.get(s).listIterator();
                 while (i.hasNext()){
                     int recruiter = i.next();
                     if (preliminaryAssignment[s] != recruiter && !visited[recruiter]){
                         visited[recruiter] = true;
                         preliminaryAssignment[s] = recruiter;
+//                        System.out.println("candidate " + s + " is assigned to " + recruiter);
                         queue.add(recruiter);
                     }
                 }
