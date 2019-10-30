@@ -119,7 +119,7 @@ class Main
 
 		//YOUR CODE STARTS HERE
         
-        for (int i = 0; i<n-1; i++){
+        for (int i = 0; i<n; i++){
             int current_recruiter = preliminaryAssignment[i];
             recruiterCapacities[current_recruiter]--;
         }
