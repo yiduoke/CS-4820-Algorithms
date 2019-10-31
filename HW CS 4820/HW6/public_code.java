@@ -109,6 +109,12 @@ class Main
 		existsValidAssignment = false;
 		validAssignment = new int[n];
 		bottleneckRecruiters = new int[n+k];
+		// boolean[] visited = new boolean[n+k];
+		int[] parent = new int[n+k]; //also works as visited; -1 means not visited
+		Arrays.fill(parent, -1);
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+
+		int s = n - 1;
 
 		//YOUR CODE STARTS HERE
         
@@ -117,23 +123,25 @@ class Main
             recruiterCapacities[current_recruiter]--;
         }
         
-        int s = n - 1;
-        boolean[] visited = new boolean[n+k];
-        LinkedList<Integer> queue = new LinkedList<Integer>();
-        
-        visited[s] = true;
+		parent[s] = -2;
         queue.add(s);
-        
-        int last_candidate = n-1;
         
         while (queue.size() != 0){
             s = queue.poll();
             
             if (s >= n){ // a recruiter
                 if (recruiterCapacities[s] > 0){
-                    preliminaryAssignment[last_candidate] = s;
                     existsValidAssignment = true;
                     validAssignment = preliminaryAssignment;
+
+					int current_person = s;
+					while (current_person != n-1){
+						int current_parent = parent[current_person];
+						if (current_person >= n){ //recruiter
+							validAssignment[current_parent] = current_person;
+						}
+						current_person = current_parent;
+					}
                     break;
                 }
                 else{
@@ -141,22 +149,19 @@ class Main
                     Iterator<Integer> i = neighbors.get(s).listIterator();
                     while (i.hasNext()){
                         int candidate = i.next();
-                        if (preliminaryAssignment[candidate] == s && !visited[candidate]){
-                            visited[candidate] = true;
-                            preliminaryAssignment[candidate] = 0;
+						if (preliminaryAssignment[candidate] == s && parent[candidate] == -1){
+							parent[candidate] = s;
                             queue.add(candidate);
                         }
                     }
                 }
             }
             else{ // a candidate
-                last_candidate = s;
                 Iterator<Integer> i = neighbors.get(s).listIterator();
                 while (i.hasNext()){
                     int recruiter = i.next();
-                    if (preliminaryAssignment[s] != recruiter && !visited[recruiter]){
-                        visited[recruiter] = true;
-                        preliminaryAssignment[s] = recruiter;
+					if (preliminaryAssignment[s] != recruiter && parent[recruiter] == -1){
+						parent[recruiter] = s;
                         queue.add(recruiter);
                     }
                 }
