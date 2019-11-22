@@ -1,5 +1,6 @@
 boolean winStrat1(allTrueConfigs){ // list of all variable assignments that makes phi true
-                                   // (e.g. [[T,F], [T,T]] means [[x1 = T, x2 = F], [x1 = T, x2 = T]])
+                                   // (e.g. [[T,F], [T,T]], which means means
+                                   // [[x1 = T, x2 = F], [x1 = T, x2 = T]])
     
     length = allTrueConfigs.length
     if (length == 0){
