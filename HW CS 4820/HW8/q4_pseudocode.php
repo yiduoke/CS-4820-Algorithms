@@ -3,7 +3,7 @@ boolean winStrat1(allTrueConfigs){ // list of all variable assignments that make
                                    // [[x1 = T, x2 = F], [x1 = T, x2 = T]])
     
     length = allTrueConfigs.length
-    if (length < 2){ // player 2 won't make any more choices
+    if (length == 0){ // base case; game over
         return true;
     }
     
