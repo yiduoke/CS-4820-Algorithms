@@ -21,10 +21,15 @@ class Main{
             // To sort in descending order revert  
             // the '>' Operator 
             int col = 1;
-            if (entry1[col] > entry2[col]) 
+            if (entry1[col] > entry2[col]){
                 return 1;
-            else
+            }
+            else if (entry1[col] < entry2[col]){
                 return -1; 
+            } 
+            else{
+                return 0;
+            }
           } 
         });  // End of function call sort(). 
     } 
@@ -46,8 +51,11 @@ class Main{
             if (density1 > density2){
                 return 1;
             }  
-            else{
+            else if (density1 < density2){
                 return -1; 
+            }
+            else{
+                return 0;
             }
           } 
         });  // End of function call sort(). 
