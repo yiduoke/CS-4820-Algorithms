@@ -57,10 +57,9 @@ class Main{
         
         int n = 0; //number of things
         int W = 0; //maximum weight allowed
-        // int[] vs = new int[1]; //the n values
-        // int[] ws = new int[1]; //the n weights
         int[][] vs_and_ws = new int[1][3];
-        // double[] densities = new double[1]; //densities vi/wi
+        int[] value_answer = new int[1];
+        int[] density_answer = new int[1];
         
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in));
         
@@ -71,18 +70,15 @@ class Main{
 
             n = Integer.parseInt(n_and_W[0]);
             W = Integer.parseInt(n_and_W[1]);
-            // vs = new int[n];
-            // ws = new int[n];
-            // densities = new double[n];
             vs_and_ws = new int[n][3];
+
+            value_answer = new int[n];
+            density_answer = new int[n];
 
             String[] v_and_w; 
             for (int i = 0; i < n; i++){
                 line = inputStream.readLine();
                 v_and_w = line.split(" ");
-                // vs[i] = Integer.parseInt(v_and_w[0]);
-                // ws[i] = Integer.parseInt(v_and_w[1]);
-                // densities[i] = vs[i] * 1.0 / ws[i];
                 vs_and_ws[i][0] = i;
                 vs_and_ws[i][1] = Integer.parseInt(v_and_w[0]);
                 vs_and_ws[i][2] = Integer.parseInt(v_and_w[1]);
@@ -99,27 +95,72 @@ class Main{
 
         // Arrays.sort(densities);
         // Arrays.sort(vs);
+        // sortbyValue(vs_and_ws);
+        // // testing input reading; passed, all good
+        // System.out.println("n: " + n);
+        // System.out.println("W: " + W);
+        // for (int i = 0; i < n; i++){
+        //     System.out.print("i: " + i + " ");
+        //     System.out.print("vs[" + i + "]: " + vs_and_ws[i][1] + " ");
+        //     System.out.println("ws[" + i + "]: " + vs_and_ws[i][2]);
+        //     // System.out.println("densities[" + i + "]: " + densities[i]);
+        // }
+
+        // sortbyDensity(vs_and_ws);
+        // // testing input reading; passed, all good
+        // System.out.println("\n\n\n\nn: " + n);
+        // System.out.println("W: " + W);
+        // for (int i = 0; i < n; i++){
+        //     System.out.print("i: " + i + " ");
+        //     System.out.print("vs[" + i + "]: " + vs_and_ws[i][1] + " ");
+        //     System.out.println("ws[" + i + "]: " + vs_and_ws[i][2]);
+        //     System.out.println("densities[" + i + "]: " + vs_and_ws[i][1] * 1.0 / vs_and_ws[i][2]);
+        // }
+
         sortbyValue(vs_and_ws);
-        // testing input reading; passed, all good
-        System.out.println("n: " + n);
-        System.out.println("W: " + W);
+        int current_weight = 0;
+        int current_value_value = 0;
         for (int i = 0; i < n; i++){
-            System.out.print("i: " + i + " ");
-            System.out.print("vs[" + i + "]: " + vs_and_ws[i][1] + " ");
-            System.out.println("ws[" + i + "]: " + vs_and_ws[i][2]);
-            // System.out.println("densities[" + i + "]: " + densities[i]);
+            int index = vs_and_ws[i][0];
+            current_weight += vs_and_ws[i][2];
+            if (current_weight <= W){
+                value_answer[index] = 1;
+                current_value_value += vs_and_ws[i][1];
+            }
+            else{
+                break;
+            }
         }
 
+
         sortbyDensity(vs_and_ws);
-        // testing input reading; passed, all good
-        System.out.println("\n\n\n\nn: " + n);
-        System.out.println("W: " + W);
+        current_weight = 0;
+        int current_value_density = 0;
         for (int i = 0; i < n; i++){
-            System.out.print("i: " + i + " ");
-            System.out.print("vs[" + i + "]: " + vs_and_ws[i][1] + " ");
-            System.out.println("ws[" + i + "]: " + vs_and_ws[i][2]);
-            System.out.println("densities[" + i + "]: " + vs_and_ws[i][1] * 1.0 / vs_and_ws[i][2]);
+            int index = vs_and_ws[i][0];
+            current_weight += vs_and_ws[i][2];
+            if (current_weight <= W){
+                density_answer[index] = 1;
+                current_value_density += vs_and_ws[i][1];
+            }
+            else{
+                break;
+            }
         }
+
+        if (current_value_value >= current_value_density){
+            System.out.println(current_value_value);
+            for (int i = 0; i < n; i++){
+                System.out.println(value_answer[i]);
+            }
+        }
+        else{
+            System.out.println(current_value_density);
+            for (int i = 0; i < n; i++){
+                System.out.println(density_answer[i]);
+            }
+        }
+
         long startTime = System.nanoTime();
     }
 }
